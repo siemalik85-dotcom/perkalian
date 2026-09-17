@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAMILY 100 PERKALIAN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3b82f6 100%);
+            min-height: 100vh;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 10px;
+        }
+        @media (min-width: 768px) {
+            .card-grid {
+                grid-template-columns: repeat(10, minmax(0, 1fr));
+                gap: 12px;
+            }
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.9); }
+        }
+        .glow-effect {
+            animation: pulse-glow 2s infinite;
+        }
+        /* Hide scrollbars for neat UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-white flex flex-col min-h-screen selection:bg-yellow-400 selection:text-slate-900">
+
+    <header class="bg-indigo-950/80 backdrop-blur-md border-b border-indigo-800 sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-yellow-400 to-amber-500 p-2.5 rounded-2xl shadow-md text-slate-950 font-black text-2xl flex items-center justify-center w-12 h-12">
+                    ×
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-300 via-amber-200 to-white bg-clip-text text-transparent">
+                        FAMILY 100 PERKALIAN
+                    </h1>
+                    <p class="text-xs text-indigo-200 font-medium">Petualangan Seru Menguasai Perkalian Kelas 5 SD</p>
+                </div>
+            </div>
+
+            <div id="header-nav-btns" class="hidden flex items-center space-x-2">
+                <button onclick="openInstructions()" class="bg-indigo-900 hover:bg-indigo-800 text-indigo-200 px-3 py-2 rounded-xl font-semibold text-xs transition border border-indigo-700 flex items-center gap-1.5 shadow-sm">
+                    📖 Petunjuk
+                </button>
+                <button onclick="confirmReset()" class="bg-rose-900/60 hover:bg-rose-800 text-rose-200 px-3 py-2 rounded-xl font-semibold text-xs transition border border-rose-700/60 flex items-center gap-1.5 shadow-sm">
+                    🔄 Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="start-screen" class="flex-1 flex items-center justify-center p-4">
+        <div class="max-w-3xl w-full bg-indigo-900/40 backdrop-blur-xl border border-indigo-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="inline-flex items-center justify-center p-4 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-3xl shadow-xl mb-6 text-slate-950 font-black text-4xl transform hover:scale-105 transition duration-300">
+                <span>🎯 100</span>
+            </div>
+
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-3 tracking-tight">
+                FAMILY 100 <span class="text-yellow-400">PERKALIAN</span>
+            </h2>
+            <p class="text-base sm:text-lg text-indigo-200 font-medium mb-8 max-w-xl mx-auto">
+                Asah kemampuan perkalian bilangan cacah puluhan dan ratusan dengan cara yang seru dan interaktif bersama 5 kelompok belajar!
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button onclick="startGame()" class="w-full sm:w-auto bg-gradient-to-r from-yellow-400 via-amber-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-extrabold px-8 py-4 rounded-2xl shadow-lg hover:shadow-yellow-500/30 transform hover:-translate-y-0.5 transition duration-200 text-lg flex items-center justify-center gap-2">
+                    🚀 MULAI PERMAINAN
+                </button>
+                <button onclick="openInstructions()" class="w-full sm:w-auto bg-indigo-800/80 hover:bg-indigo-700 text-indigo-100 font-bold px-6 py-4 rounded-2xl border border-indigo-600 transition duration-200 text-base">
+                    📖 Petunjuk Permainan
+                </button>
+                <button onclick="confirmReset()" class="w-full sm:w-auto bg-slate-800/80 hover:bg-slate-700 text-rose-300 font-bold px-6 py-4 rounded-2xl border border-slate-700 transition duration-200 text-base">
+                    🔄 Reset Data
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="game-screen" class="hidden flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+        <!-- Dashboard & Scoreboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Scoreboard Panels (5 Groups) -->
+            <div class="lg:col-span-3 bg-indigo-950/60 backdrop-blur-md border border-indigo-800/80 rounded-3xl p-4 sm:p-6 shadow-xl">
+                <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                    <h3 class="text-lg font-bold text-yellow-400 flex items-center gap-2">
+                        🏆 PAPAN SKOR KELOMPOK
+                    </h3>
+                    <div class="text-xs font-semibold bg-indigo-900/80 px-3 py-1.5 rounded-xl border border-indigo-700 text-indigo-200">
+                        Kartu Digunakan: <span id="used-count" class="text-yellow-400 font-bold">0</span> / 100 | Tersedia: <span id="available-count" class="text-emerald-400 font-bold">100</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    <!-- Group 1 -->
+                    <div id="group-card-1" class="bg-gradient-to-b from-indigo-900/70 to-indigo-950/90 border border-indigo-700/50 p-3.5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300">
+                        <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK 1</div>
+                        <div class="text-2xl font-black text-yellow-300 score-val flex items-center justify-center gap-1">
+                            <span>⭐</span> <span id="score-1">0</span>
+                        </div>
+                        <div class="text-[10px] text-indigo-300 mt-1 font-medium">Poin</div>
+                    </div>
+                    <!-- Group 2 -->
+                    <div id="group-card-2" class="bg-gradient-to-b from-indigo-900/70 to-indigo-950/90 border border-indigo-700/50 p-3.5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300">
+                        <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK 2</div>
+                        <div class="text-2xl font-black text-yellow-300 score-val flex items-center justify-center gap-1">
+                            <span>⭐</span> <span id="score-2">0</span>
+                        </div>
+                        <div class="text-[10px] text-indigo-300 mt-1 font-medium">Poin</div>
+                    </div>
+                    <!-- Group 3 -->
+                    <div id="group-card-3" class="bg-gradient-to-b from-indigo-900/70 to-indigo-950/90 border border-indigo-700/50 p-3.5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300">
+                        <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK 3</div>
+                        <div class="text-2xl font-black text-yellow-300 score-val flex items-center justify-center gap-1">
+                            <span>⭐</span> <span id="score-3">0</span>
+                        </div>
+                        <div class="text-[10px] text-indigo-300 mt-1 font-medium">Poin</div>
+                    </div>
+                    <!-- Group 4 -->
+                    <div id="group-card-4" class="bg-gradient-to-b from-indigo-900/70 to-indigo-950/90 border border-indigo-700/50 p-3.5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300">
+                        <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK 4</div>
+                        <div class="text-2xl font-black text-yellow-300 score-val flex items-center justify-center gap-1">
+                            <span>⭐</span> <span id="score-4">0</span>
+                        </div>
+                        <div class="text-[10px] text-indigo-300 mt-1 font-medium">Poin</div>
+                    </div>
+                    <!-- Group 5 -->
+                    <div id="group-card-5" class="bg-gradient-to-b from-indigo-900/70 to-indigo-950/90 border border-indigo-700/50 p-3.5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300 col-span-2 sm:col-span-1">
+                        <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK 5</div>
+                        <div class="text-2xl font-black text-yellow-300 score-val flex items-center justify-center gap-1">
+                            <span>⭐</span> <span id="score-5">0</span>
+                        </div>
+                        <div class="text-[10px] text-indigo-300 mt-1 font-medium">Poin</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Panel -->
+            <div class="bg-indigo-950/60 backdrop-blur-md border border-indigo-800/80 rounded-3xl p-5 shadow-xl flex flex-col justify-between">
+                <div>
+                    <h4 class="text-sm font-bold text-indigo-200 mb-2">Panduan Guru</h4>
+                    <p class="text-xs text-indigo-300 leading-relaxed mb-4">
+                        Pilih kartu bernomor yang tersedia. Setelah soal terbuka, tentukan kelompok yang akan menjawab.
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="openInstructions()" class="flex-1 bg-indigo-900 hover:bg-indigo-800 text-indigo-200 py-2.5 px-3 rounded-xl font-semibold text-xs border border-indigo-700 transition">
+                        📖 Petunjuk
+                    </button>
+                    <button onclick="confirmReset()" class="flex-1 bg-rose-900/60 hover:bg-rose-800 text-rose-200 py-2.5 px-3 rounded-xl font-semibold text-xs border border-rose-700/60 transition">
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-indigo-950/60 backdrop-blur-md border border-indigo-800/80 rounded-3xl p-4 sm:p-6 shadow-xl flex-1">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-white flex items-center gap-2">
+                    🎴 PILIH KARTU PERTANYAAN (1 - 100)
+                </h3>
+                <span class="text-xs text-indigo-300 bg-indigo-900/60 px-3 py-1 rounded-full border border-indigo-700/50">
+                    Klik kartu untuk membuka soal
+                </span>
+            </div>
+
+            <!-- Cards Container -->
+            <div id="cards-container" class="card-grid">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="question-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-indigo-900 to-indigo-950 border border-indigo-700/80 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative transform transition-all animate-in fade-in zoom-in duration-200">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-6 pb-3 border-b border-indigo-800">
+                <div class="flex items-center gap-3">
+                    <span id="modal-card-badge" class="bg-yellow-400 text-slate-950 px-3 py-1 rounded-xl font-extrabold text-sm shadow">
+                        KARTU #1
+                    </span>
+                    <span id="modal-difficulty-badge" class="bg-blue-600/80 text-blue-100 text-xs px-2.5 py-1 rounded-lg font-semibold border border-blue-400/30">
+                        Mudah
+                    </span>
+                </div>
+                <button onclick="closeModalToCards()" class="text-indigo-300 hover:text-white bg-indigo-950/80 hover:bg-indigo-800 p-2 rounded-xl transition border border-indigo-800 text-xs font-semibold flex items-center gap-1">
+                    ✕ Kembali ke Kartu
+                </button>
+            </div>
+
+            <!-- Step 1: Question Display & Group Selection -->
+            <div id="modal-step-1">
+                <div class="bg-indigo-950/80 border border-indigo-800/80 p-5 rounded-2xl mb-6 shadow-inner">
+                    <h3 id="modal-question-text" class="text-xl sm:text-2xl font-bold text-white text-center leading-snug">
+                        Berapakah hasil dari 25 × 4?
+                    </h3>
+                </div>
+
+                <!-- Group Selector Section -->
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-yellow-300 uppercase tracking-wider mb-2 text-center">
+                        👉 Pilih Kelompok yang Mendapat Giliran Menjawab:
+                    </label>
+                    <div class="grid grid-cols-5 gap-2" id="group-select-buttons">
+                        <button onclick="selectGroup(1)" id="g-btn-1" class="group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow">Kel. 1</button>
+                        <button onclick="selectGroup(2)" id="g-btn-2" class="group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow">Kel. 2</button>
+                        <button onclick="selectGroup(3)" id="g-btn-3" class="group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow">Kel. 3</button>
+                        <button onclick="selectGroup(4)" id="g-btn-4" class="group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow">Kel. 4</button>
+                        <button onclick="selectGroup(5)" id="g-btn-5" class="group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow">Kel. 5</button>
+                    </div>
+                </div>
+
+                <!-- Options Grid -->
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-indigo-300 uppercase tracking-wider mb-2">Pilihan Jawaban:</label>
+                    <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Confirm Action -->
+                <div class="flex justify-end">
+                    <button id="confirm-ans-btn" onclick="confirmAnswer()" disabled class="w-full bg-slate-800 text-slate-400 font-bold py-3.5 px-6 rounded-xl cursor-not-allowed transition shadow">
+                        Konfirmasi Jawaban
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Result Feedback View -->
+            <div id="modal-step-2" class="hidden text-center py-4">
+                <div id="result-icon-box" class="w-20 h-20 mx-auto rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-xl">
+                    🎉
+                </div>
+                <h3 id="result-title" class="text-3xl font-extrabold mb-2 text-white">ANDA BENAR!</h3>
+                <p id="result-desc" class="text-indigo-200 text-base mb-6 font-medium">Hebat! Jawaban Anda tepat sekali.</p>
+
+                <div id="explanation-box" class="bg-indigo-950/80 border border-indigo-800 p-4 rounded-2xl mb-6 text-sm text-indigo-300 text-left">
+                    <span class="font-bold text-yellow-400 block mb-1">Penjelasan:</span>
+                    <span id="explanation-text">25 × 4 = 100</span>
+                </div>
+
+                <button onclick="finishCardSession()" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-extrabold py-4 px-6 rounded-2xl shadow-lg transition text-base flex items-center justify-center gap-2">
+                    <span>➡️ KEMBALI KE KARTU</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-indigo-900 to-indigo-950 border border-indigo-700/80 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto no-scrollbar">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-indigo-800">
+                <h3 class="text-xl font-extrabold text-yellow-400">📖 Petunjuk Permainan</h3>
+                <button onclick="closeInstructions()" class="text-indigo-300 hover:text-white bg-indigo-950/80 hover:bg-indigo-800 p-2 rounded-xl transition border border-indigo-800 text-xs font-semibold">✕ Tutup</button>
+            </div>
+            <div class="space-y-3 text-sm text-indigo-200 leading-relaxed">
+                <p>1. Game ini terdiri dari <strong class="text-yellow-300">100 kartu pertanyaan</strong> perkalian bilangan cacah (puluhan & ratusan dengan satuan) untuk siswa kelas 5 SD.</p>
+                <p>2. Guru atau moderator meminta siswa memilih satu kartu yang masih tersedia (berwarna biru/ungu).</p>
+                <p>3. Setelah kartu terbuka, guru memilih salah satu dari <strong class="text-yellow-300">5 kelompok</strong> yang akan mendapat giliran menjawab.</p>
+                <p>4. Baca soal dan pilihan jawaban (A, B, C, D), lalu klik konfirmasi jawaban setelah kelompok menjawab.</p>
+                <p>5. Jawaban benar memberikan <strong class="text-emerald-400">+10 poin</strong> bagi kelompok tersebut. Jawaban salah memberikan <strong class="text-rose-400">0 poin</strong> (tidak mengurangi skor).</p>
+                <p>6. Kartu yang sudah selesai dikerjakan akan berubah warna menjadi <strong class="text-rose-500">MERAH</strong> dan tidak dapat dipilih kembali.</p>
+                <p>7. Permainan berlanjut sampai seluruh 100 kartu habis digunakan!</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-indigo-800 flex justify-end">
+                <button onclick="closeInstructions()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">Mengerti</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-indigo-900 to-indigo-950 border border-indigo-700/80 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-center">
+            <div class="w-16 h-16 bg-rose-900/60 border border-rose-600/50 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 text-rose-300">
+                ⚠️
+            </div>
+            <h3 class="text-2xl font-extrabold text-white mb-2">Reset Permainan?</h3>
+            <p class="text-indigo-200 text-sm mb-6">Semua progres kartu akan tertutup kembali dan skor kelima kelompok akan diatur ulang menjadi 0.</p>
+            <div class="flex gap-3">
+                <button onclick="closeResetModal()" class="flex-1 bg-indigo-900 hover:bg-indigo-800 text-indigo-200 font-bold py-3 rounded-xl border border-indigo-700 transition text-sm">Batal</button>
+                <button onclick="executeReset()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition text-sm shadow">Ya, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Completion Results Modal -->
+    <div id="completion-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-indigo-900 to-indigo-950 border border-yellow-500/50 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl text-center max-h-[90vh] overflow-y-auto no-scrollbar">
+            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-400 to-amber-500 rounded-3xl mx-auto flex items-center justify-center text-4xl mb-4 shadow-xl text-slate-950 font-black">
+                🏆
+            </div>
+            <h3 class="text-3xl sm:text-4xl font-extrabold text-yellow-400 mb-2">PERMAINAN SELESAI!</h3>
+            <p class="text-indigo-200 text-sm mb-6">Terima kasih sudah belajar perkalian dengan penuh semangat dan gembira.</p>
+
+            <div class="bg-indigo-950/80 border border-indigo-800 rounded-2xl p-4 mb-6">
+                <h4 class="text-sm font-bold text-indigo-300 mb-3">Rekapitulasi Skor Akhir Kelompok</h4>
+                <div id="final-scores-list" class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="closeCompletionModal(); startGame();" class="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow transition text-sm">
+                    🔄 Main Lagi
+                </button>
+                <button onclick="confirmReset(); closeCompletionModal();" class="bg-indigo-900 hover:bg-indigo-800 text-indigo-200 font-bold py-3.5 px-6 rounded-2xl border border-indigo-700 transition text-sm">
+                    🔄 Reset Total
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = [
+            { id: 1, question: "Berapakah hasil dari 25 × 4?", options: ["90", "100", "110", "120"], answer: "100", explanation: "25 × 4 = 100", difficulty: "Mudah" },
+            { id: 2, question: "Berapakah hasil dari 12 × 5?", options: ["50", "55", "60", "65"], answer: "60", explanation: "12 × 5 = 60", difficulty: "Mudah" },
+            { id: 3, question: "Berapakah hasil dari 15 × 6?", options: ["80", "90", "100", "110"], answer: "90", explanation: "15 × 6 = 90", difficulty: "Mudah" },
+            { id: 4, question: "Berapakah hasil dari 30 × 3?", options: ["80", "90", "100", "120"], answer: "90", explanation: "3 × 3 = 9, jadi 30 × 3 = 90", difficulty: "Mudah" },
+            { id: 5, question: "Berapakah hasil dari 14 × 7?", options: ["88", "98", "108", "118"], answer: "98", explanation: "14 × 7 = (10 × 7) + (4 × 7) = 70 + 28 = 98", difficulty: "Mudah" },
+            { id: 6, question: "Berapakah hasil dari 16 × 5?", options: ["70", "80", "90", "100"], answer: "80", explanation: "16 × 5 = 80", difficulty: "Mudah" },
+            { id: 7, question: "Berapakah hasil dari 20 × 8?", options: ["140", "150", "160", "170"], answer: "160", explanation: "2 × 8 = 16, jadi 20 × 8 = 160", difficulty: "Mudah" },
+            { id: 8, question: "Berapakah hasil dari 18 × 4?", options: ["62", "70", "72", "82"], answer: "72", explanation: "18 × 4 = (10 × 4) + (8 × 4) = 40 + 32 = 72", difficulty: "Mudah" },
+            { id: 9, question: "Berapakah hasil dari 22 × 3?", options: ["64", "66", "68", "76"], answer: "66", explanation: "22 × 3 = 66", difficulty: "Mudah" },
+            { id: 10, question: "Berapakah hasil dari 15 × 8?", options: ["110", "120", "130", "140"], answer: "120", explanation: "15 × 8 = 120", difficulty: "Mudah" },
+            { id: 11, question: "Berapakah hasil dari 13 × 6?", options: ["76", "78", "82", "88"], answer: "78", explanation: "13 × 6 = 78", difficulty: "Mudah" },
+            { id: 12, question: "Berapakah hasil dari 24 × 5?", options: ["100", "110", "120", "130"], answer: "120", explanation: "24 × 5 = 120", difficulty: "Mudah" },
+            { id: 13, question: "Berapakah hasil dari 40 × 2?", options: ["70", "80", "90", "100"], answer: "80", explanation: "40 × 2 = 80", difficulty: "Mudah" },
+            { id: 14, question: "Berapakah hasil dari 17 × 4?", options: ["64", "68", "72", "76"], answer: "68", explanation: "17 × 4 = 68", difficulty: "Mudah" },
+            { id: 15, question: "Berapakah hasil dari 19 × 5?", options: ["85", "90", "95", "100"], answer: "95", explanation: "19 × 5 = 95", difficulty: "Mudah" },
+            { id: 16, question: "Berapakah hasil dari 21 × 4?", options: ["80", "84", "88", "92"], answer: "84", explanation: "21 × 4 = 84", difficulty: "Mudah" },
+            { id: 17, question: "Berapakah hasil dari 35 × 2?", options: ["60", "70", "80", "90"], answer: "70", explanation: "35 × 2 = 70", difficulty: "Mudah" },
+            { id: 18, question: "Berapakah hasil dari 45 × 2?", options: ["80", "90", "100", "110"], answer: "90", explanation: "45 × 2 = 90", difficulty: "Mudah" },
+            { id: 19, question: "Berapakah hasil dari 26 × 3?", options: ["76", "78", "80", "84"], answer: "78", explanation: "26 × 3 = 78", difficulty: "Mudah" },
+            { id: 20, question: "Berapakah hasil dari 23 × 4?", options: ["82", "88", "92", "96"], answer: "92", explanation: "23 × 4 = 92", difficulty: "Mudah" },
+            { id: 21, question: "Berapakah hasil dari 11 × 9?", options: ["99", "90", "108", "89"], answer: "99", explanation: "11 × 9 = 99", difficulty: "Mudah" },
+            { id: 22, question: "Berapakah hasil dari 12 × 8?", options: ["92", "96", "104", "108"], answer: "96", explanation: "12 × 8 = 96", difficulty: "Mudah" },
+            { id: 23, question: "Berapakah hasil dari 14 × 6?", options: ["82", "84", "86", "88"], answer: "84", explanation: "14 × 6 = 84", difficulty: "Mudah" },
+            { id: 24, question: "Berapakah hasil dari 15 × 5?", options: ["65", "70", "75", "80"], answer: "75", explanation: "15 × 5 = 75", difficulty: "Mudah" },
+            { id: 25, question: "Berapakah hasil dari 16 × 4?", options: ["60", "64", "68", "72"], answer: "64", explanation: "16 × 4 = 64", difficulty: "Mudah" },
+            { id: 26, question: "Berapakah hasil dari 25 × 3?", options: ["65", "70", "75", "80"], answer: "75", explanation: "25 × 3 = 75", difficulty: "Mudah" },
+            { id: 27, question: "Berapakah hasil dari 50 × 2?", options: ["90", "100", "110", "120"], answer: "100", explanation: "50 × 2 = 100", difficulty: "Mudah" },
+            { id: 28, question: "Berapakah hasil dari 30 × 4?", options: ["100", "110", "120", "130"], answer: "120", explanation: "30 × 4 = 120", difficulty: "Mudah" },
+            { id: 29, question: "Berapakah hasil dari 20 × 5?", options: ["90", "100", "110", "120"], answer: "100", explanation: "20 × 5 = 100", difficulty: "Mudah" },
+            { id: 30, question: "Berapakah hasil dari 15 × 4?", options: ["50", "55", "60", "65"], answer: "60", explanation: "15 × 4 = 60", difficulty: "Mudah" },
+
+            // Difficulty: Sedang (31 - 70)
+            { id: 31, question: "Berapakah hasil dari 45 × 5?", options: ["215", "225", "235", "245"], answer: "225", explanation: "45 × 5 = 225", difficulty: "Sedang" },
+            { id: 32, question: "Berapakah hasil dari 62 × 4?", options: ["238", "248", "258", "268"], answer: "248", explanation: "62 × 4 = 248", difficulty: "Sedang" },
+            { id: 33, question: "Berapakah hasil dari 75 × 3?", options: ["215", "225", "235", "245"], answer: "225", explanation: "75 × 3 = 225", difficulty: "Sedang" },
+            { id: 34, question: "Berapakah hasil dari 84 × 2?", options: ["158", "168", "178", "188"], answer: "168", explanation: "84 × 2 = 168", difficulty: "Sedang" },
+            { id: 35, question: "Berapakah hasil dari 36 × 6?", options: ["206", "216", "226", "236"], answer: "216", explanation: "36 × 6 = 216", difficulty: "Sedang" },
+            { id: 36, question: "Berapakah hasil dari 48 × 5?", options: ["230", "240", "250", "260"], answer: "240", explanation: "48 × 5 = 240", difficulty: "Sedang" },
+            { id: 37, question: "Berapakah hasil dari 55 × 4?", options: ["210", "220", "230", "240"], answer: "220", explanation: "55 × 4 = 220", difficulty: "Sedang" },
+            { id: 38, question: "Berapakah hasil dari 68 × 3?", options: ["194", "204", "214", "224"], answer: "204", explanation: "68 × 3 = 204", difficulty: "Sedang" },
+            { id: 39, question: "Berapakah hasil dari 92 × 2?", options: ["174", "184", "194", "204"], answer: "184", explanation: "92 × 2 = 184", difficulty: "Sedang" },
+            { id: 40, question: "Berapakah hasil dari 34 × 7?", options: ["228", "238", "248", "258"], answer: "238", explanation: "34 × 7 = 238", difficulty: "Sedang" },
+            { id: 41, question: "Berapakah hasil dari 125 × 2?", options: ["230", "240", "250", "260"], answer: "250", explanation: "125 × 2 = 250", difficulty: "Sedang" },
+            { id: 42, question: "Berapakah hasil dari 110 × 4?", options: ["420", "430", "440", "450"], answer: "440", explanation: "110 × 4 = 440", difficulty: "Sedang" },
+            { id: 43, question: "Berapakah hasil dari 215 × 3?", options: ["635", "645", "655", "665"], answer: "645", explanation: "215 × 3 = 645", difficulty: "Sedang" },
+            { id: 44, question: "Berapakah hasil dari 150 × 5?", options: ["650", "700", "750", "800"], answer: "750", explanation: "150 × 5 = 750", difficulty: "Sedang" },
+            { id: 45, question: "Berapakah hasil dari 130 × 6?", options: ["760", "770", "780", "790"], answer: "780", explanation: "130 × 6 = 780", difficulty: "Sedang" },
+            { id: 46, question: "Berapakah hasil dari 205 × 4?", options: ["800", "810", "820", "830"], answer: "820", explanation: "205 × 4 = 820", difficulty: "Sedang" },
+            { id: 47, question: "Berapakah hasil dari 140 × 5?", options: ["600", "650", "700", "750"], answer: "700", explanation: "140 × 5 = 700", difficulty: "Sedang" },
+            { id: 48, question: "Berapakah hasil dari 160 × 3?", options: ["460", "470", "480", "490"], answer: "480", explanation: "160 × 3 = 480", difficulty: "Sedang" },
+            { id: 49, question: "Berapakah hasil dari 175 × 2?", options: ["330", "340", "350", "360"], answer: "350", explanation: "175 × 2 = 350", difficulty: "Sedang" },
+            { id: 50, question: "Berapakah hasil dari 180 × 3?", options: ["520", "530", "540", "550"], answer: "540", explanation: "180 × 3 = 540", difficulty: "Sedang" },
+            { id: 51, question: "Berapakah hasil dari 43 × 5?", options: ["205", "215", "225", "235"], answer: "215", explanation: "43 × 5 = 215", difficulty: "Sedang" },
+            { id: 52, question: "Berapakah hasil dari 53 × 4?", options: ["202", "212", "222", "232"], answer: "212", explanation: "53 × 4 = 212", difficulty: "Sedang" },
+            { id: 53, question: "Berapakah hasil dari 64 × 3?", options: ["182", "192", "202", "212"], answer: "192", explanation: "64 × 3 = 192", difficulty: "Sedang" },
+            { id: 54, question: "Berapakah hasil dari 72 × 4?", options: ["278", "288", "298", "308"], answer: "288", explanation: "72 × 4 = 288", difficulty: "Sedang" },
+            { id: 55, question: "Berapakah hasil dari 85 × 3?", options: ["245", "255", "265", "275"], answer: "255", explanation: "85 × 3 = 255", difficulty: "Sedang" },
+            { id: 56, question: "Berapakah hasil dari 95 × 2?", options: ["180", "190", "200", "210"], answer: "190", explanation: "95 × 2 = 190", difficulty: "Sedang" },
+            { id: 57, question: "Berapakah hasil dari 38 × 6?", options: ["218", "228", "238", "248"], answer: "228", explanation: "38 × 6 = 228", difficulty: "Sedang" },
+            { id: 58, question: "Berapakah hasil dari 47 × 5?", options: ["225", "235", "245", "255"], answer: "235", explanation: "47 × 5 = 235", difficulty: "Sedang" },
+            { id: 59, question: "Berapakah hasil dari 58 × 4?", options: ["222", "232", "242", "252"], answer: "232", explanation: "58 × 4 = 232", difficulty: "Sedang" },
+            { id: 60, question: "Berapakah hasil dari 66 × 3?", options: ["188", "198", "208", "218"], answer: "198", explanation: "66 × 3 = 198", difficulty: "Sedang" },
+            { id: 61, question: "Berapakah hasil dari 115 × 4?", options: ["440", "450", "460", "470"], answer: "460", explanation: "115 × 4 = 460", difficulty: "Sedang" },
+            { id: 62, question: "Berapakah hasil dari 135 × 3?", options: ["395", "405", "415", "425"], answer: "405", explanation: "135 × 3 = 405", difficulty: "Sedang" },
+            { id: 63, question: "Berapakah hasil dari 145 × 2?", options: ["280", "290", "300", "310"], answer: "290", explanation: "145 × 2 = 290", difficulty: "Sedang" },
+            { id: 64, question: "Berapakah hasil dari 120 × 5?", options: ["500", "550", "600", "650"], answer: "600", explanation: "120 × 5 = 600", difficulty: "Sedang" },
+            { id: 65, question: "Berapakah hasil dari 130 × 5?", options: ["600", "650", "700", "750"], answer: "650", explanation: "130 × 5 = 650", difficulty: "Sedang" },
+            { id: 66, question: "Berapakah hasil dari 155 × 3?", options: ["455", "465", "475", "485"], answer: "465", explanation: "155 × 3 = 465", difficulty: "Sedang" },
+            { id: 67, question: "Berapakah hasil dari 165 × 2?", options: ["320", "330", "340", "350"], answer: "330", explanation: "165 × 2 = 330", difficulty: "Sedang" },
+            { id: 68, question: "Berapakah hasil dari 190 × 3?", options: ["550", "560", "570", "580"], answer: "570", explanation: "190 × 3 = 570", difficulty: "Sedang" },
+            { id: 69, question: "Berapakah hasil dari 220 × 3?", options: ["640", "650", "660", "670"], answer: "660", explanation: "220 × 3 = 660", difficulty: "Sedang" },
+            { id: 70, question: "Berapakah hasil dari 230 × 4?", options: ["900", "910", "920", "930"], answer: "920", explanation: "230 × 4 = 920", difficulty: "Sedang" },
+
+            // Difficulty: Sulit (71 - 100)
+            { id: 71, question: "Berapakah hasil dari 345 × 3?", options: ["1.025", "1.035", "1.045", "1.055"], answer: "1.035", explanation: "345 × 3 = 1.035", difficulty: "Sulit" },
+            { id: 72, question: "Berapakah hasil dari 412 × 4?", options: ["1.638", "1.648", "1.658", "1.668"], answer: "1.648", explanation: "412 × 4 = 1.648", difficulty: "Sulit" },
+            { id: 73, question: "Berapakah hasil dari 524 × 3?", options: ["1.562", "1.572", "1.582", "1.592"], answer: "1.572", explanation: "524 × 3 = 1.572", difficulty: "Sulit" },
+            { id: 74, question: "Berapakah hasil dari 615 × 4?", options: ["2.440", "2.450", "2.460", "2.470"], answer: "2.460", explanation: "615 × 4 = 2.460", difficulty: "Sulit" },
+            { id: 75, question: "Berapakah hasil dari 720 × 5?", options: ["3.500", "3.600", "3.700", "3.800"], answer: "3.600", explanation: "720 × 5 = 3.600", difficulty: "Sulit" },
+            { id: 76, question: "Berapakah hasil dari 385 × 4?", options: ["1.520", "1.530", "1.540", "1.550"], answer: "1.540", explanation: "385 × 4 = 1.540", difficulty: "Sulit" },
+            { id: 77, question: "Berapakah hasil dari 450 × 6?", options: ["2.600", "2.700", "2.800", "2.900"], answer: "2.700", explanation: "450 × 6 = 2.700", difficulty: "Sulit" },
+            { id: 78, question: "Berapakah hasil dari 532 × 4?", options: ["2.118", "2.128", "2.138", "2.148"], answer: "2.128", explanation: "532 × 4 = 2.128", difficulty: "Sulit" },
+            { id: 79, question: "Berapakah hasil dari 648 × 3?", options: ["1.934", "1.944", "1.954", "1.964"], answer: "1.944", explanation: "648 × 3 = 1.944", difficulty: "Sulit" },
+            { id: 80, question: "Berapakah hasil dari 815 × 4?", options: ["3.240", "3.250", "3.260", "3.270"], answer: "3.260", explanation: "815 × 4 = 3.260", difficulty: "Sulit" },
+            { id: 81, question: "Berapakah hasil dari 295 × 5?", options: ["1.465", "1.475", "1.485", "1.495"], answer: "1.475", explanation: "295 × 5 = 1.475", difficulty: "Sulit" },
+            { id: 82, question: "Berapakah hasil dari 376 × 4?", options: ["1.504", "1.514", "1.524", "1.534"], answer: "1.504", explanation: "376 × 4 = 1.504", difficulty: "Sulit" },
+            { id: 83, question: "Berapakah hasil dari 425 × 6?", options: ["2.450", "2.500", "2.550", "2.600"], answer: "2.550", explanation: "425 × 6 = 2.550", difficulty: "Sulit" },
+            { id: 84, question: "Berapakah hasil dari 514 × 5?", options: ["2.550", "2.560", "2.570", "2.580"], answer: "2.570", explanation: "514 × 5 = 2.570", difficulty: "Sulit" },
+            { id: 85, question: "Berapakah hasil dari 625 × 4?", options: ["2.400", "2.500", "2.600", "2.700"], answer: "2.500", explanation: "625 × 4 = 2.500", difficulty: "Sulit" },
+            { id: 86, question: "Berapakah hasil dari 712 × 3?", options: ["2.126", "2.136", "2.146", "2.156"], answer: "2.136", explanation: "712 × 3 = 2.136", difficulty: "Sulit" },
+            { id: 87, question: "Berapakah hasil dari 824 × 3?", options: ["2.462", "2.472", "2.482", "2.492"], answer: "2.472", explanation: "824 × 3 = 2.472", difficulty: "Sulit" },
+            { id: 88, question: "Berapakah hasil dari 935 × 2?", options: ["1.860", "1.870", "1.880", "1.890"], answer: "1.870", explanation: "935 × 2 = 1.870", difficulty: "Sulit" },
+            { id: 89, question: "Berapakah hasil dari 348 × 5?", options: ["1.720", "1.730", "1.740", "1.750"], answer: "1.740", explanation: "348 × 5 = 1.740", difficulty: "Sulit" },
+            { id: 90, question: "Berapakah hasil dari 462 × 4?", options: ["1.838", "1.848", "1.858", "1.868"], answer: "1.848", explanation: "462 × 4 = 1.848", difficulty: "Sulit" },
+            { id: 91, question: "Berapakah hasil dari 574 × 3?", options: ["1.712", "1.722", "1.732", "1.742"], answer: "1.722", explanation: "574 × 3 = 1.722", difficulty: "Sulit" },
+            { id: 92, question: "Berapakah hasil dari 685 × 2?", options: ["1.360", "1.370", "1.380", "1.390"], answer: "1.370", explanation: "685 × 2 = 1.370", difficulty: "Sulit" },
+            { id: 93, question: "Berapakah hasil dari 792 × 2?", options: ["1.574", "1.584", "1.594", "1.604"], answer: "1.584", explanation: "792 × 2 = 1.584", difficulty: "Sulit" },
+            { id: 94, question: "Berapakah hasil dari 814 × 3?", options: ["2.432", "2.442", "2.452", "2.462"], answer: "2.442", explanation: "814 × 3 = 2.442", difficulty: "Sulit" },
+            { id: 95, question: "Berapakah hasil dari 924 × 2?", options: ["1.838", "1.848", "1.858", "1.868"], answer: "1.848", explanation: "924 × 2 = 1.848", difficulty: "Sulit" },
+            { id: 96, question: "Berapakah hasil dari 315 × 7?", options: ["2.195", "2.205", "2.215", "2.225"], answer: "2.205", explanation: "315 × 7 = 2.205", difficulty: "Sulit" },
+            { id: 97, question: "Berapakah hasil dari 428 × 5?", options: ["2.130", "2.140", "2.150", "2.160"], answer: "2.140", explanation: "428 × 5 = 2.140", difficulty: "Sulit" },
+            { id: 98, question: "Berapakah hasil dari 536 × 4?", options: ["2.134", "2.144", "2.154", "2.164"], answer: "2.144", explanation: "536 × 4 = 2.144", difficulty: "Sulit" },
+            { id: 99, question: "Berapakah hasil dari 642 × 3?", options: ["1.916", "1.926", "1.936", "1.946"], answer: "1.926", explanation: "642 × 3 = 1.926", difficulty: "Sulit" },
+            { id: 100, question: "Berapakah hasil dari 750 × 4?", options: ["2.800", "2.900", "3.000", "3.100"], answer: "3.000", explanation: "750 × 4 = 3.000", difficulty: "Sulit" }
+        ];
+
+        let gameState = {
+            scores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+            cardStatus: {}, // key: id (1-100), value: 'available' | 'used'
+            activeCardId: null,
+            selectedGroup: null,
+            selectedAnswer: null,
+            correctAnswersCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+            wrongAnswersCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+        };
+
+        // Initialize localStorage load if available
+        function loadGameData() {
+            const saved = localStorage.getItem('family100_perkalian_state');
+            if (saved) {
+                try {
+                    gameState = JSON.parse(saved);
+                } catch (e) {
+                    console.error("Failed to load saved state", e);
+                    initDefaultState();
+                }
+            } else {
+                initDefaultState();
+            }
+        }
+
+        function initDefaultState() {
+            gameState = {
+                scores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+                cardStatus: {},
+                activeCardId: null,
+                selectedGroup: null,
+                selectedAnswer: null,
+                correctAnswersCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+                wrongAnswersCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+            };
+            for (let i = 1; i <= 100; i++) {
+                gameState.cardStatus[i] = 'available';
+            }
+        }
+
+        function saveGameData() {
+            localStorage.setItem('family100_perkalian_state', JSON.stringify(gameState));
+        }
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const headerNavBtns = document.getElementById('header-nav-btns');
+        const cardsContainer = document.getElementById('cards-container');
+        const questionModal = document.getElementById('question-modal');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const resetModal = document.getElementById('reset-modal');
+        const completionModal = document.getElementById('completion-modal');
+
+        // Start Game Transition
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            headerNavBtns.classList.remove('hidden');
+            renderCards();
+            updateScoreboard();
+        }
+
+        function renderCards() {
+            cardsContainer.innerHTML = '';
+            let usedCount = 0;
+            let availableCount = 0;
+
+            for (let i = 1; i <= 100; i++) {
+                const status = gameState.cardStatus[i] || 'available';
+                const cardEl = document.createElement('div');
+
+                if (status === 'used') {
+                    usedCount++;
+                    cardEl.className = "bg-rose-600/90 border border-rose-500 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center shadow-md relative opacity-90 cursor-not-allowed select-none";
+                    cardEl.innerHTML = `
+                        <span class="text-xs font-bold text-rose-100">#${i}</span>
+                        <span class="text-lg text-white mt-0.5">✓</span>
+                    `;
+                } else {
+                    availableCount++;
+                    cardEl.className = "bg-gradient-to-br from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 border border-indigo-400/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-indigo-500/30 cursor-pointer transform hover:-translate-y-1 transition duration-200 select-none";
+                    cardEl.innerHTML = `
+                        <span class="text-[10px] font-bold text-indigo-200">KARTU</span>
+                        <span class="text-base sm:text-lg font-black text-white">${i}</span>
+                        <span class="text-xs text-yellow-300">?</span>
+                    `;
+                    cardEl.onclick = () => openCard(i);
+                }
+                cardsContainer.appendChild(cardEl);
+            }
+
+            document.getElementById('used-count').innerText = usedCount;
+            document.getElementById('available-count').innerText = availableCount;
+
+            // Check if all cards used
+            if (usedCount === 100 && startScreen.classList.contains('hidden')) {
+                showCompletionModal();
+            }
+        }
+
+        function openCard(cardId) {
+            if (gameState.cardStatus[cardId] === 'used') return;
+
+            gameState.activeCardId = cardId;
+            gameState.selectedGroup = null;
+            gameState.selectedAnswer = null;
+
+            const qData = questionsData.find(q => q.id === cardId);
+            if (!qData) return;
+
+            document.getElementById('modal-card-badge').innerText = `KARTU #${cardId}`;
+            document.getElementById('modal-difficulty-badge').innerText = qData.difficulty;
+            document.getElementById('modal-question-text').innerText = qData.question;
+
+            // Reset group buttons
+            for (let g = 1; g <= 5; g++) {
+                const btn = document.getElementById(`g-btn-${g}`);
+                btn.className = "group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow";
+            }
+
+            // Render Options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            qData.options.forEach((opt, idx) => {
+                const letter = ['A', 'B', 'C', 'D'][idx];
+                const optBtn = document.createElement('button');
+                optBtn.className = "option-btn bg-indigo-950/80 hover:bg-indigo-900 border-2 border-indigo-800 p-3.5 rounded-xl text-left font-semibold text-sm sm:text-base text-indigo-100 transition flex items-center gap-3 shadow-sm";
+                optBtn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-indigo-900 border border-indigo-700 flex items-center justify-center text-xs font-bold text-yellow-300">${letter}</span>
+                    <span>${opt}</span>
+                `;
+                optBtn.onclick = () => selectAnswer(opt, optBtn);
+                optionsContainer.appendChild(optBtn);
+            });
+
+            // Reset step views
+            document.getElementById('modal-step-1').classList.remove('hidden');
+            document.getElementById('modal-step-2').classList.add('hidden');
+            updateConfirmButtonState();
+
+            questionModal.classList.remove('hidden');
+        }
+
+        function selectGroup(groupId) {
+            gameState.selectedGroup = groupId;
+            for (let g = 1; g <= 5; g++) {
+                const btn = document.getElementById(`g-btn-${g}`);
+                if (g === groupId) {
+                    btn.className = "group-sel-btn bg-amber-500 border-2 border-yellow-300 py-3 rounded-xl font-black text-sm text-slate-950 transition shadow-lg scale-105";
+                } else {
+                    btn.className = "group-sel-btn bg-indigo-950 hover:bg-indigo-800 border-2 border-indigo-700 py-3 rounded-xl font-bold text-sm text-indigo-100 transition shadow";
+                }
+            }
+            updateConfirmButtonState();
+        }
+
+        function selectAnswer(optionText, btnElement) {
+            gameState.selectedAnswer = optionText;
+            const allOpts = document.querySelectorAll('.option-btn');
+            allOpts.forEach(b => {
+                b.classList.remove('border-yellow-400', 'bg-indigo-800', 'ring-2', 'ring-yellow-400');
+                b.classList.add('bg-indigo-950/80', 'border-indigo-800');
+            });
+            btnElement.classList.remove('bg-indigo-950/80', 'border-indigo-800');
+            btnElement.classList.add('bg-indigo-800', 'border-yellow-400', 'ring-2', 'ring-yellow-400');
+            updateConfirmButtonState();
+        }
+
+        function updateConfirmButtonState() {
+            const confirmBtn = document.getElementById('confirm-ans-btn');
+            if (gameState.selectedGroup !== null && gameState.selectedAnswer !== null) {
+                confirmBtn.disabled = false;
+                confirmBtn.className = "w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold py-3.5 px-6 rounded-xl cursor-pointer transition shadow-lg";
+                confirmBtn.innerText = `Konfirmasi Jawaban (Kelompok ${gameState.selectedGroup})`;
+            } else {
+                confirmBtn.disabled = true;
+                confirmBtn.className = "w-full bg-slate-800 text-slate-400 font-bold py-3.5 px-6 rounded-xl cursor-not-allowed transition shadow";
+                confirmBtn.innerText = gameState.selectedGroup === null ? "Pilih Kelompok Terlebih Dahulu" : "Pilih Jawaban Terlebih Dahulu";
+            }
+        }
+
+        function confirmAnswer() {
+            if (gameState.selectedGroup === null || gameState.selectedAnswer === null) return;
+
+            const qData = questionsData.find(q => q.id === gameState.activeCardId);
+            const isCorrect = (gameState.selectedAnswer.trim() === qData.answer.trim());
+            const group = gameState.selectedGroup;
+
+            if (isCorrect) {
+                gameState.scores[group] += 10;
+                gameState.correctAnswersCount[group]++;
+            } else {
+                gameState.wrongAnswersCount[group]++;
+            }
+
+            gameState.cardStatus[gameState.activeCardId] = 'used';
+            saveGameData();
+            updateScoreboard();
+
+            // Display Result Step
+            document.getElementById('modal-step-1').classList.add('hidden');
+            document.getElementById('modal-step-2').classList.remove('hidden');
+
+            const iconBox = document.getElementById('result-icon-box');
+            const resTitle = document.getElementById('result-title');
+            const resDesc = document.getElementById('result-desc');
+            const expText = document.getElementById('explanation-text');
+
+            expText.innerText = `${qData.explanation} (Kelompok ${group} ${isCorrect ? 'mendapat +10 poin' : 'mendapat 0 poin'})`;
+
+            if (isCorrect) {
+                iconBox.className = "w-20 h-20 mx-auto bg-emerald-500/20 border border-emerald-500/50 rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-xl text-emerald-300";
+                iconBox.innerText = "🎉";
+                resTitle.innerText = "ANDA BENAR!";
+                resTitle.className = "text-3xl font-extrabold mb-2 text-emerald-400";
+                resDesc.innerText = `Hebat! Kelompok ${group} berhasil menjawab dengan tepat dan mendapatkan 10 poin.`;
+            } else {
+                iconBox.className = "w-20 h-20 mx-auto bg-rose-500/20 border border-rose-500/50 rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-xl text-rose-300";
+                iconBox.innerText = "❌";
+                resTitle.innerText = "ANDA SALAH";
+                resTitle.className = "text-3xl font-extrabold mb-2 text-rose-400";
+                resDesc.innerText = `Belum tepat. Kelompok ${group} tetap semangat belajar! Poin tidak bertambah (0).`;
+            }
+        }
+
+        function closeModalToCards() {
+            questionModal.classList.add('hidden');
+            renderCards();
+        }
+
+        function finishCardSession() {
+            questionModal.classList.add('hidden');
+            renderCards();
+        }
+
+        function updateScoreboard() {
+            for (let g = 1; g <= 5; g++) {
+                document.getElementById(`score-${g}`).innerText = gameState.scores[g];
+            }
+        }
+
+        function openInstructions() {
+            instructionsModal.classList.remove('hidden');
+        }
+
+        function closeInstructions() {
+            instructionsModal.classList.add('hidden');
+        }
+
+        function confirmReset() {
+            resetModal.classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            resetModal.classList.add('hidden');
+        }
+
+        function executeReset() {
+            initDefaultState();
+            saveGameData();
+            updateScoreboard();
+            renderCards();
+            closeResetModal();
+            questionModal.classList.add('hidden');
+            completionModal.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            gameScreen.classList.add('hidden');
+            headerNavBtns.classList.add('hidden');
+        }
+
+        function showCompletionModal() {
+            const listEl = document.getElementById('final-scores-list');
+            listEl.innerHTML = '';
+            for (let g = 1; g <= 5; g++) {
+                const item = document.createElement('div');
+                item.className = "bg-indigo-900/60 border border-indigo-700/60 p-3 rounded-2xl text-center shadow";
+                item.innerHTML = `
+                    <div class="text-xs font-bold text-indigo-300 mb-1">KELOMPOK ${g}</div>
+                    <div class="text-2xl font-black text-yellow-300 mb-1">⭐ ${gameState.scores[g]}</div>
+                    <div class="text-[10px] text-emerald-300 font-semibold">Benar: ${gameState.correctAnswersCount[g]}</div>
+                    <div class="text-[10px] text-rose-300 font-semibold">Salah: ${gameState.wrongAnswersCount[g]}</div>
+                `;
+                listEl.appendChild(item);
+            }
+            completionModal.classList.remove('hidden');
+        }
+
+        function closeCompletionModal() {
+            completionModal.classList.add('hidden');
+        }
+
+        // On window load
+        window.onload = function() {
+            loadGameData();
+        };
+    </script>
+</body>
+</html>
